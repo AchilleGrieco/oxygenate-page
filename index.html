@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oxygenate – Quit Smoking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple-light: #c084fc;
+      --purple-mid: #a855f7;
+      --purple-dark: #7c3aed;
+      --pink: #f472b6;
+      --white: #ffffff;
+      --off-white: #faf5ff;
+      --text-muted: rgba(255,255,255,0.65);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0f0617;
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background orbs ── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.35;
+    }
+    .orb-1 { width: 600px; height: 600px; background: #7c3aed; top: -150px; left: -150px; animation: drift1 14s ease-in-out infinite alternate; }
+    .orb-2 { width: 400px; height: 400px; background: #f472b6; bottom: -100px; right: -100px; animation: drift2 18s ease-in-out infinite alternate; }
+    .orb-3 { width: 300px; height: 300px; background: #60a5fa; top: 40%; left: 60%; animation: drift3 20s ease-in-out infinite alternate; }
+
+    @keyframes drift1 { from { transform: translate(0,0) scale(1); } to { transform: translate(60px, 40px) scale(1.1); } }
+    @keyframes drift2 { from { transform: translate(0,0) scale(1); } to { transform: translate(-40px, -60px) scale(1.15); } }
+    @keyframes drift3 { from { transform: translate(0,0); } to { transform: translate(-80px, 50px); } }
+
+    /* ── Layout ── */
+    .wrapper { position: relative; z-index: 1; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    .logo-wrap {
+      width: 100px; height: 100px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 20px 60px rgba(124,58,237,0.6);
+      margin-bottom: 36px;
+      animation: floatLogo 6s ease-in-out infinite;
+    }
+    .logo-wrap img { width: 100%; height: 100%; display: block; }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .pill {
+      display: inline-block;
+      background: rgba(168,85,247,0.2);
+      border: 1px solid rgba(168,85,247,0.4);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 24px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #e879f9, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .desc {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .cta-wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 16px 32px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,58,237,0.65); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 16px 32px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+    /* ── Features ── */
+    .features {
+      padding: 100px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 64px;
+      letter-spacing: -0.02em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 36px 28px;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.07); }
+
+    .card-icon {
+      font-size: 36px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .footer-logo img {
+      width: 36px; height: 36px; border-radius: 10px;
+    }
+    .footer-logo span {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .footer-links {
+      display: flex; gap: 28px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="logo-wrap">
+      <img src="data:image/jpeg;base64,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" alt="Oxygenate logo" />
+    </div>
+
+    <div class="pill">Available on iOS</div>
+
+    <h1>Breathe <span>free</span> again.<br>One day at a time.</h1>
+
+    <p class="desc">Stop smoking by changing your habits. Beat cravings with interactive mini-games, track your progress, and breathe free again. Start your journey today!</p>
+
+    <div class="cta-wrap">
+      <a href="#" class="btn-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on the App Store
+      </a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <p class="section-label reveal">Why Oxygenate</p>
+    <h2 class="section-title reveal">Everything you need<br>to quit for good</h2>
+
+    <div class="cards">
+      <div class="card reveal">
+        <span class="card-icon">🎮</span>
+        <h3>Beat Cravings with Mini-Games</h3>
+        <p>When a craving hits, distract your mind with interactive games designed to redirect your urge and keep you on track.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">📈</span>
+        <h3>Track Your Progress</h3>
+        <p>Watch your health recover in real time. See how much money you've saved and how many cigarettes you've resisted.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">🌬️</span>
+        <h3>Build Better Habits</h3>
+        <p>Replace smoking triggers with healthy alternatives. Oxygenate helps you understand and reshape your daily routines.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">
+      <img src="data:image/jpeg;base64,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" alt="Oxygenate" />
+      <span>Oxygenate</span>
+    </div>
+    <nav class="footer-links">
+      <a href="https://achillegrieco.github.io/oxygenate-privacy-policy/">Privacy Policy</a>
+    </nav>
+    <p class="footer-copy">© 2025 Oxygenate. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
